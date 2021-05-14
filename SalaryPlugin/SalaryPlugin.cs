@@ -37,7 +37,7 @@ namespace SalaryPlugin
             foreach (var salary in _configuration.GetSection("Salaries").Get<List<Salary>>())
             {
                 _logger.LogWarning("Starting " + salary.RoleId);
-                await _salaryService.StartSalaryService(salary.RoleId);
+                await _salaryService.StartSalaryService(salary.RoleId!);
             }
         }
 
@@ -47,7 +47,7 @@ namespace SalaryPlugin
             foreach (var salary in _configuration.GetSection("Salaries").Get<List<Salary>>())
             {
                 _logger.LogWarning("Stopping " + salary.RoleId);
-                await _salaryService.StopSalaryService(salary.RoleId);
+                await _salaryService.StopSalaryService(salary.RoleId!);
             }
             _logger.LogInformation("Salart Plugin 1.0.0 has been unloaded");
         }
