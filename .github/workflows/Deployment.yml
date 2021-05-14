@@ -20,6 +20,6 @@ jobs:
     - name: Build
       run: dotnet build --configuration Release --no-restore
     - name: Push to NuGet
-      run: dotnet nuget push /home/runner/work/SalaryPlugin/SalaryPlugin/bin/Release/Feli.SalaryPlugin.${{ github.event.inputs.version }}.nupkg
+      run: dotnet nuget push /home/runner/work/SalaryPlugin/SalaryPlugin/SalaryPlugin/bin/Release/Feli.SalaryPlugin.${{ github.event.inputs.version }}.nupkg
              --api-key ${{ secrets.NUGET_DEPLOY_KEY }}
              --source https://api.nuget.org/v3/index.json
