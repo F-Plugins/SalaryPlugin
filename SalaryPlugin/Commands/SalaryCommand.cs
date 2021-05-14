@@ -36,7 +36,7 @@ namespace SalaryPlugin.Commands
                 return;
             }
 
-            if (Context.Parameters[1] != "on" | Context.Parameters[1] != "off")
+            if (await Context.Parameters.GetAsync<string>(1) != "on" && await Context.Parameters.GetAsync<string>(1) != "off")
             {
                 await Context.Actor.PrintMessageAsync(_stringLocalizer["Usage"], Color.Green);
                 return;
