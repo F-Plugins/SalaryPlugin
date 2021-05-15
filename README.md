@@ -1,6 +1,15 @@
 # SalaryPlugin
+Id: Feli.SalaryPlugin
+Version: 1.0.2
+Author: Feli
+Website: fplugins.com
 
-Pay your players for their worktime!!
+## Commands
+- salary Correct command usage: /salary <RoleId> <on/off>: A command to set the status of a salary
+  id: SalaryPlugin.Commands.SalaryCommand
+
+## Permissions
+- Feli.SalaryPlugin:commands.salary: Grants access to the SalaryPlugin.Commands.SalaryCommand command.
 
 ## Configuration
 ```
