@@ -50,7 +50,7 @@ namespace SalaryPlugin.Commands
                 return;
             }
 
-            if (Context.Parameters[1] == "on")
+            if (await Context.Parameters.GetAsync<string>(1) == "on")
             {
                 await _salaryService.StartSalaryService(salary!.RoleId!);
                 await Context.Actor.PrintMessageAsync(_stringLocalizer["Finish", new { RoleId = salary.RoleId, Status = "on"}], Color.Green);

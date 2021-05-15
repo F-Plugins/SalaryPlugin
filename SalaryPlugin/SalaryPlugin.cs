@@ -31,7 +31,7 @@ namespace SalaryPlugin
 
         protected override async Task OnLoadAsync()
         {
-            _logger.LogInformation("Salart Plugin 1.0.0 has been loaded");
+            _logger.LogInformation("Salart Plugin 1.0.2 has been loaded");
             _logger.LogWarning("Get more plugins at fplugins.com");
             _logger.LogWarning("Setting up salaries");
             foreach (var salary in _configuration.GetSection("Salaries").Get<List<Salary>>())
@@ -49,7 +49,7 @@ namespace SalaryPlugin
                 _logger.LogWarning("Stopping " + salary.RoleId);
                 await _salaryService.StopSalaryService(salary.RoleId!);
             }
-            _logger.LogInformation("Salart Plugin 1.0.0 has been unloaded");
+            _logger.LogInformation("Salart Plugin 1.0.2 has been unloaded");
         }
     }
 }

@@ -2813,10 +2813,10 @@
     "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
   },
   "project": {
-    "version": "0.1.0",
+    "version": "1.0.2",
     "restore": {
       "projectUniqueName": "C:\\Users\\Felipe Master Race\\Desktop\\SalaryPlugin\\SalaryPlugin\\SalaryPlugin.csproj",
-      "projectName": "SalaryPlugin",
+      "projectName": "Feli.SalaryPlugin",
       "projectPath": "C:\\Users\\Felipe Master Race\\Desktop\\SalaryPlugin\\SalaryPlugin\\SalaryPlugin.csproj",
       "packagesPath": "C:\\Users\\Felipe Master Race\\.nuget\\packages\\",
       "outputPath": "C:\\Users\\Felipe Master Race\\Desktop\\SalaryPlugin\\SalaryPlugin\\obj\\",
@@ -2887,7 +2887,7 @@
       "code": "NU1605",
       "level": "Warning",
       "warningLevel": 1,
-      "message": "Degradación del paquete detectada: OpenMod.Core de 3.0.28 a 3.0.27. Haga referencia al paquete directamente desde el proyecto para seleccionar una versión diferente. \r\n SalaryPlugin -> OpenMod.Extensions.Economy.Abstractions 3.0.28 -> OpenMod.Core (>= 3.0.28) \r\n SalaryPlugin -> OpenMod.Core (>= 3.0.27)",
+      "message": "Degradación del paquete detectada: OpenMod.Core de 3.0.28 a 3.0.27. Haga referencia al paquete directamente desde el proyecto para seleccionar una versión diferente. \r\n Feli.SalaryPlugin -> OpenMod.Extensions.Economy.Abstractions 3.0.28 -> OpenMod.Core (>= 3.0.28) \r\n Feli.SalaryPlugin -> OpenMod.Core (>= 3.0.27)",
       "libraryId": "OpenMod.Core",
       "targetGraphs": [
         ".NETStandard,Version=v2.0"

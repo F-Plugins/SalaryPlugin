@@ -5,10 +5,10 @@
   },
   "projects": {
     "C:\\Users\\Felipe Master Race\\Desktop\\SalaryPlugin\\SalaryPlugin\\SalaryPlugin.csproj": {
-      "version": "0.1.0",
+      "version": "1.0.2",
       "restore": {
         "projectUniqueName": "C:\\Users\\Felipe Master Race\\Desktop\\SalaryPlugin\\SalaryPlugin\\SalaryPlugin.csproj",
-        "projectName": "SalaryPlugin",
+        "projectName": "Feli.SalaryPlugin",
         "projectPath": "C:\\Users\\Felipe Master Race\\Desktop\\SalaryPlugin\\SalaryPlugin\\SalaryPlugin.csproj",
         "packagesPath": "C:\\Users\\Felipe Master Race\\.nuget\\packages\\",
         "outputPath": "C:\\Users\\Felipe Master Race\\Desktop\\SalaryPlugin\\SalaryPlugin\\obj\\",
