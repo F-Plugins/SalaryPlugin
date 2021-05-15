@@ -25,10 +25,10 @@ namespace SalaryPlugin.Services
         private readonly IConfiguration _configuration;
         private readonly IUserDataStore _userDataStore;
         private readonly IStringLocalizer _stringLocalizer;
-        private readonly IEconomyProvider _economyProvider;
+        private readonly Lazy<IEconomyProvider> _economyProvider;
         private readonly IUserManager _userManager;
 
-        public SalaryService(IUserDataStore userDataStore, IUserManager userManager, IStringLocalizer stringLocalizer, IConfiguration configuration, IEconomyProvider economyProvider)
+        public SalaryService(IUserDataStore userDataStore, IUserManager userManager, IStringLocalizer stringLocalizer, IConfiguration configuration, Lazy<IEconomyProvider> economyProvider)
         {
             _configuration = configuration;
             _userDataStore = userDataStore;
@@ -51,20 +51,20 @@ namespace SalaryPlugin.Services
         {
             while (_salaries.Contains(salaryId))
             {
-                var salary = _configuration.GetSection("Salaries").Get<List<Salary>>().FirstOrDefault();
-
+                var salary = _configuration.GetSection("Salaries").Get<List<Salary>>().FirstOrDefault(x => x.RoleId == salaryId);
                 if(salary != null)
                 {
-                    foreach(var player in await _userManager.GetUsersAsync(KnownActorTypes.Player))
+                    foreach (var player in await _userManager.GetUsersAsync(KnownActorTypes.Player))
                     {
+                        if (player.Session == null) continue;
+
                         var playerData = await _userDataStore.GetUserDataAsync(player.Id, KnownActorTypes.Player);
-                        if (playerData!.Roles!.Contains(salary!.RoleId!))
+                        if (playerData!.Permissions!.Contains(salary!.RoleId!))
                         {
-                            await _economyProvider.SetBalanceAsync(player.Id, KnownActorTypes.Player, await _economyProvider.GetBalanceAsync(player.Id, KnownActorTypes.Player) + salary.Payment);
+                            await _economyProvider.Value.UpdateBalanceAsync(player.Id, KnownActorTypes.Player, salary.Payment, "Salary");
                             await player.PrintMessageAsync(_stringLocalizer["SalaryPayment", new { Money = salary.Payment, RoleId = salary.RoleId }], Color.Green);
                         }
                     }
-
                     await Task.Delay(TimeSpan.FromSeconds(salary.Timer));
                 }
                 else
@@ -81,7 +81,7 @@ namespace SalaryPlugin.Services
         {
             if (_salaries.Contains(salaryId))
             {
-                _salaries.Remove(salaryId);
+                _salaries.RemoveAll(x => x == salaryId);
             }
             return Task.CompletedTask;
         }
