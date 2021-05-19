@@ -1,4 +1,6 @@
 # SalaryPlugin
+![Discord](https://img.shields.io/discord/742861338233274418?label=Discord&logo=Discord) ![NugetDownloads](https://img.shields.io/nuget/dt/Feli.SalaryPlugin?label=Nuget%20Downloads)
+
 Id: Feli.SalaryPlugin
 
 Version: 1.0.3
