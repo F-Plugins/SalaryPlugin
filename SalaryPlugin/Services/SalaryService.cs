@@ -59,7 +59,7 @@ namespace SalaryPlugin.Services
                         if (player.Session == null) continue;
 
                         var playerData = await _userDataStore.GetUserDataAsync(player.Id, KnownActorTypes.Player);
-                        if (playerData!.Permissions!.Contains(salary!.RoleId!))
+                        if (playerData!.Roles!.Contains(salary!.RoleId!))
                         {
                             await _economyProvider.Value.UpdateBalanceAsync(player.Id, KnownActorTypes.Player, salary.Payment, "Salary");
                             await player.PrintMessageAsync(_stringLocalizer["SalaryPayment", new { Money = salary.Payment, RoleId = salary.RoleId }], Color.Green);
