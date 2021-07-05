@@ -31,7 +31,7 @@ namespace SalaryPlugin
 
         protected override async Task OnLoadAsync()
         {
-            _logger.LogInformation("Salart Plugin 1.0.3 has been loaded");
+            _logger.LogInformation("Salart Plugin 1.0.5 has been loaded");
             _logger.LogInformation("Get more plugins at fplugins.com");
             _logger.LogInformation("Setting up salaries");
             foreach (var salary in _configuration.GetSection("Salaries").Get<List<Salary>>())
