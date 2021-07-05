@@ -31,25 +31,25 @@ namespace SalaryPlugin
 
         protected override async Task OnLoadAsync()
         {
-            _logger.LogInformation("Salart Plugin 1.0.2 has been loaded");
-            _logger.LogWarning("Get more plugins at fplugins.com");
-            _logger.LogWarning("Setting up salaries");
+            _logger.LogInformation("Salart Plugin 1.0.3 has been loaded");
+            _logger.LogInformation("Get more plugins at fplugins.com");
+            _logger.LogInformation("Setting up salaries");
             foreach (var salary in _configuration.GetSection("Salaries").Get<List<Salary>>())
             {
-                _logger.LogWarning("Starting " + salary.RoleId);
+                _logger.LogInformation("Starting " + salary.RoleId);
                 await _salaryService.StartSalaryService(salary.RoleId!);
             }
         }
 
         protected override async Task OnUnloadAsync()
         {
-            _logger.LogWarning("Stopping salaries");
+            _logger.LogInformation("Stopping salaries");
             foreach (var salary in _configuration.GetSection("Salaries").Get<List<Salary>>())
             {
-                _logger.LogWarning("Stopping " + salary.RoleId);
+                _logger.LogInformation("Stopping " + salary.RoleId);
                 await _salaryService.StopSalaryService(salary.RoleId!);
             }
-            _logger.LogInformation("Salart Plugin 1.0.2 has been unloaded");
+            _logger.LogInformation("Salart Plugin 1.0.3 has been unloaded");
         }
     }
 }
