@@ -38,7 +38,7 @@ public class SalaryTaskExecutor : ITaskExecutor
         var (amount, roleId, message, online) = ParseArgs(task);
         var users = await _userDataStore.GetUsersDataAsync(KnownActorTypes.Player);
 
-        var salaryTasks = users.Where(u => u.Roles?.Contains(roleId) ?? false).Select(u => PaySalaryAsync(u, amount, message, online));
+        var salaryTasks = users.Where(u => u.Roles?.Contains(roleId) ?? false).Select(u => PaySalaryAsync(u.Id!, u.Type!, amount, message, online));
         await Task.WhenAll(salaryTasks);
     }
 
