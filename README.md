@@ -1,49 +1,7 @@
 # SalaryPlugin
 ![Discord](https://img.shields.io/discord/742861338233274418?label=Discord&logo=Discord) ![NugetDownloads](https://img.shields.io/nuget/dt/Feli.SalaryPlugin?label=Nuget%20Downloads)
 
-Id: Feli.SalaryPlugin
+## To learn how to set up the plugin click [here](https://docs.fplugins.com/plugins/salary)
 
-Version: 1.0.3
 
-Author: Feli
-
-Website: fplugins.com
-
-## Commands
-- salary Correct command usage: /salary <RoleId> <on/off>: A command to set the status of a salary
-  id: SalaryPlugin.Commands.SalaryCommand
-
-## Permissions
-- Feli.SalaryPlugin:commands.salary: Grants access to the SalaryPlugin.Commands.SalaryCommand command.
-
-## Configuration
-```
-Salaries:
-- RoleId: "unemployed"
-  Payment: 5000
-  Timer: 120
-- RoleId: "vip"
-  Payment: 6000
-  Timer: 60
-```
-
-To add more salaries do:
-```
-Salaries:
-- RoleId: "unemployed"
-  Payment: 5000
-  Timer: 120
-- RoleId: "vip"
-  Payment: 6000
-  Timer: 60
-- RoleId: "vip2"
-  Payment: 62323
-  Timer: 32
-```
-
-## Translations
-```
-SalaryPayment: "You have just recieved ${Money} for working as {RoleId}"
-Usage: "Correct command usage: /salary <RoleId> <on/off>"
-Finish: "Sucessfully set the salary {RoleId} to the status: {Status}"
-```
+You can join our to our [Discord](discord.fplugins.com)

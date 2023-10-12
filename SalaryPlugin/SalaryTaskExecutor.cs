@@ -30,10 +30,15 @@ public class SalaryTaskExecutor : ITaskExecutor
             throw new Exception($"Job \"{task.JobName}\" is missing the roleId field in args!");
         }
 
-        var (amount, roleId, message) = ParseArgs(task);
+        if (!task.Args.ContainsKey("online"))
+        {
+            throw new Exception($"Job \"{task.JobName}\" is missing the online field in args!");
+        }
+
+        var (amount, roleId, message, online) = ParseArgs(task);
         var users = await _userDataStore.GetUsersDataAsync(KnownActorTypes.Player);
 
-        var salaryTasks = users.Where(u => u.Roles?.Contains(roleId) ?? false).Select(u => PaySalaryAsync(u, amount, message));
+        var salaryTasks = users.Where(u => u.Roles?.Contains(roleId) ?? false).Select(u => PaySalaryAsync(u, amount, message, online));
         await Task.WhenAll(salaryTasks);
     }
 
@@ -42,10 +47,11 @@ public class SalaryTaskExecutor : ITaskExecutor
         return string.Equals(taskType, "salary", StringComparison.OrdinalIgnoreCase);
     }
 
-    private (decimal amount, string roleId, string? message) ParseArgs(JobTask task)
+    private (decimal amount, string roleId, string? message, bool online) ParseArgs(JobTask task)
     {
         var amount = task.Args["amount"]!.ToString();
         var roleId = task.Args["roleId"]!.ToString();
+        var online = task.Args["online"]!.ToString();
         string? message = null;
 
         if(task.Args.ContainsKey("message"))
@@ -58,19 +64,23 @@ public class SalaryTaskExecutor : ITaskExecutor
             throw new ArgumentException($"Job \"{task.JobName}\" either amount or roleId are empty");
         }
 
-        return (decimal.Parse(amount), roleId, message);
+        return (decimal.Parse(amount), roleId, message, bool.Parse(online));
     }
 
-    private async Task PaySalaryAsync(UserData data, decimal amount, string? message)
+    private async Task PaySalaryAsync(string id, string type, decimal amount, string? message, bool online)
     {
-        await _economyProvider.UpdateBalanceAsync(data.Id!, data.Type!, amount, "salary");
+        if(!online) 
+            await _economyProvider.UpdateBalanceAsync(id, type, amount, "salary");
 
         if (message is null)
             return;
 
-        var user = await _userManager.FindUserAsync(data.Type!, data.Id!, UserSearchMode.FindById);
+        var user = await _userManager.FindUserAsync(id, type, UserSearchMode.FindById);
         if (user?.Session is null)
             return;
+
+        if(online)
+            await _economyProvider.UpdateBalanceAsync(id, type, amount, "salary");
 
         await user.PrintMessageAsync(message);
     }
