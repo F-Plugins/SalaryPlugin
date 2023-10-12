@@ -1,3 +1,0 @@
-SalaryPayment: "You have just recieved ${Money} for working as {RoleId}"
-Usage: "Correct command usage: /salary <RoleId> <on/off>"
-Finish: "Sucessfully set the salary {RoleId} to the status: {Status}"

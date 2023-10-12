@@ -15,11 +15,21 @@ jobs:
       name: Checkout Repository
       with:
         fetch-depth: 0
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 5.0.x
     - name: Install dependencies
       run: dotnet restore
+    - name: Update version
+      run: "sed -i \"s#<Version>0.0.0</Version>#<Version>${{ github.event.inputs.version }}</Version>#\" SalaryPlugin/SalaryPlugin.csproj"  
+    - name: Update package version
+      run: "sed -i \"s#<PackageVersion>0.0.0</PackageVersion>#<PackageVersion>${{ github.event.inputs.version }}</PackageVersion>#\" SalaryPlugin/SalaryPlugin.csproj"  
+    - name: Update informational version
+      run: "sed -i \"s#<InformationalVersion>0.0.0</InformationalVersion>#<InformationalVersion>${{ github.event.inputs.version }}</InformationalVersion>#\" SalaryPlugin/SalaryPlugin.csproj"              
     - name: Build
-      run: dotnet build --configuration Release --no-restore
+      run: dotnet build SalaryPlugin/SalaryPlugin.csproj --configuration Release --no-restore
     - name: Push to NuGet
-      run: dotnet nuget push /home/runner/work/SalaryPlugin/SalaryPlugin/SalaryPlugin/bin/Release/Feli.SalaryPlugin.${{ github.event.inputs.version }}.nupkg
+      run: dotnet nuget push SalaryPlugin/bin/Release/*.nupkg
              --api-key ${{ secrets.NUGET_DEPLOY_KEY }}
              --source https://api.nuget.org/v3/index.json

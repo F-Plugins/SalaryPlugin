@@ -1,7 +1,0 @@
-Salaries:
-- RoleId: "unemployed"
-  Payment: 5000
-  Timer: 120
-- RoleId: "vip"
-  Payment: 6000
-  Timer: 60
