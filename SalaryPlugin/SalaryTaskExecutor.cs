@@ -59,9 +59,9 @@ public class SalaryTaskExecutor : ITaskExecutor
             message = task.Args["message"]!.ToString();
         }
 
-        if (string.IsNullOrWhiteSpace(amount) || string.IsNullOrWhiteSpace(roleId))
+        if (string.IsNullOrWhiteSpace(amount) || string.IsNullOrWhiteSpace(roleId) || string.IsNullOrWhiteSpace(online))
         {
-            throw new ArgumentException($"Job \"{task.JobName}\" either amount or roleId are empty");
+            throw new ArgumentException($"Job \"{task.JobName}\" either amount, roleId or message are empty");
         }
 
         return (decimal.Parse(amount), roleId, message, bool.Parse(online));
@@ -72,7 +72,7 @@ public class SalaryTaskExecutor : ITaskExecutor
         if(!online) 
             await _economyProvider.UpdateBalanceAsync(id, type, amount, "salary");
 
-        if (message is null)
+        if (!online && message is null)
             return;
 
         var user = await _userManager.FindUserAsync(id, type, UserSearchMode.FindById);
@@ -81,7 +81,8 @@ public class SalaryTaskExecutor : ITaskExecutor
 
         if(online)
             await _economyProvider.UpdateBalanceAsync(id, type, amount, "salary");
-
-        await user.PrintMessageAsync(message);
+        
+        if(message is not null)
+            await user.PrintMessageAsync(message);
     }
 }
