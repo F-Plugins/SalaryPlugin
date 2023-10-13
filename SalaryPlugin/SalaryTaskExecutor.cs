@@ -1,5 +1,7 @@
 ﻿using OpenMod.API.Jobs;
+using OpenMod.API.Permissions;
 using OpenMod.API.Users;
+using OpenMod.Core.Permissions;
 using OpenMod.Core.Users;
 using OpenMod.Extensions.Economy.Abstractions;
 
@@ -7,15 +9,15 @@ namespace SalaryPlugin;
 
 public class SalaryTaskExecutor : ITaskExecutor
 {
-    private readonly IUserDataStore _userDataStore;
     private readonly IEconomyProvider _economyProvider;
     private readonly IUserManager _userManager;
+    private readonly IPermissionRoleStore _permissionRoleStore;
 
-    public SalaryTaskExecutor(IUserDataStore userDataStore, IEconomyProvider economyProvider, IUserManager userManager)
+    public SalaryTaskExecutor(IEconomyProvider economyProvider, IUserManager userManager, IPermissionRoleStore permissionRoleStore)
     {
-        _userDataStore = userDataStore;
         _economyProvider = economyProvider;
         _userManager = userManager;
+        _permissionRoleStore = permissionRoleStore;
     }
 
     public async Task ExecuteAsync(JobTask task)
@@ -36,9 +38,18 @@ public class SalaryTaskExecutor : ITaskExecutor
         }
 
         var (amount, roleId, message, online) = ParseArgs(task);
-        var users = await _userDataStore.GetUsersDataAsync(KnownActorTypes.Player);
+        var users = await _userManager.GetUsersAsync(KnownActorTypes.Player);
 
-        var salaryTasks = users.Where(u => u.Roles?.Contains(roleId) ?? false).Select(u => PaySalaryAsync(u.Id!, u.Type!, amount, message, online));
+        var salaryTasks = users.Select(async u =>
+        {
+            var roles = await _permissionRoleStore.GetRolesAsync(u, true);
+
+            if (!roles.Any(c => string.Equals(c.Id, roleId, StringComparison.OrdinalIgnoreCase)))
+                return;
+
+            await PaySalaryAsync(u, amount, message, online);
+        });
+
         await Task.WhenAll(salaryTasks);
     }
 
@@ -54,7 +65,7 @@ public class SalaryTaskExecutor : ITaskExecutor
         var online = task.Args["online"]!.ToString();
         string? message = null;
 
-        if(task.Args.ContainsKey("message"))
+        if (task.Args.ContainsKey("message"))
         {
             message = task.Args["message"]!.ToString();
         }
@@ -67,22 +78,18 @@ public class SalaryTaskExecutor : ITaskExecutor
         return (decimal.Parse(amount), roleId, message, bool.Parse(online));
     }
 
-    private async Task PaySalaryAsync(string id, string type, decimal amount, string? message, bool online)
+    private async Task PaySalaryAsync(IUser user, decimal amount, string? message, bool online)
     {
-        if(!online) 
-            await _economyProvider.UpdateBalanceAsync(id, type, amount, "salary");
+        if (!online)
+            await _economyProvider.UpdateBalanceAsync(user.Id, user.Type, amount, "salary");
 
-        if (!online && message is null)
-            return;
-
-        var user = await _userManager.FindUserAsync(id, type, UserSearchMode.FindById);
         if (user?.Session is null)
             return;
 
-        if(online)
-            await _economyProvider.UpdateBalanceAsync(id, type, amount, "salary");
-        
-        if(message is not null)
+        if (online)
+            await _economyProvider.UpdateBalanceAsync(user.Id, user.Type, amount, "salary");
+
+        if (message is not null)
             await user.PrintMessageAsync(message);
     }
 }
